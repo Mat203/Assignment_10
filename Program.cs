@@ -4,6 +4,25 @@
     return Console.ReadLine();
 }
 
+bool IsNumberToken(string token)
+{
+    return int.TryParse(token, out _);
+}
+
+bool IsOperatorToken(string token)
+{
+    return token is "+" or "-" or "/" or "*" or "^";
+}
+
+bool IsLeftBracketToken(string token)
+{
+    return token == "(";
+}
+
+bool IsRightBracketToken(string token)
+{
+    return token == ")";
+}
     List<string> Tokenize(string r)
     {
         string buffer = "";
