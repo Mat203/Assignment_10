@@ -23,7 +23,23 @@ bool IsRightBracketToken(string token)
 {
     return token == ")";
 }
-    List<string> Tokenize(string r)
+
+int Precedence(string token)
+{
+    if (token == "+" || token == "-")
+    {
+        return 2;
+    }
+    if (token == "*" || token == "/")
+    {
+        return 3;
+    }
+    if (token == "^")
+    {
+        return 4;
+    }
+}
+List<string> Tokenize(string r)
     {
         string buffer = "";
         List<string> result = new List<string>();
@@ -52,8 +68,21 @@ bool IsRightBracketToken(string token)
         }
 
         return result;
-    }
+}
 
+List<string> ToPRN(List<string> tokens)
+{
+    Queue<string> output = new Queue<string>();
+    Stack<string> operators = new Stack<string>();
+
+    foreach (string token in tokens)
+    {
+        if (IsNumberToken(token))
+        {
+            output.Enqueue(token);
+        }
+    }
+}
 
 string input = Input();
 List <string> tokens = Tokenize(input);
