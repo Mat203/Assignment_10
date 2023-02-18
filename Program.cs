@@ -61,7 +61,7 @@ List<string> ToReverse(List<string> tokens)
         {
             while (
                 operators.Count != 0 &&
-                IsLeftBracketToken(operators.Peek()) &&
+                !IsLeftBracketToken(operators.Peek()) &&
                 (
                     Precedance(operators.Peek()) > Precedance(token) ||
                     (
@@ -69,7 +69,7 @@ List<string> ToReverse(List<string> tokens)
                         IsLeftAssociative(token)
                     )
                 )
-            )
+                )
             {
                 output.Enqueue(operators.Pop());
             }
@@ -82,7 +82,7 @@ List<string> ToReverse(List<string> tokens)
         }
         else if (IsRightBracketToken(token))
         {
-            while (IsLeftBracketToken(operators.Peek()))
+            while (!IsLeftBracketToken(operators.Peek()))
             {
                 if (operators.Count == 0)
                 {
@@ -92,7 +92,7 @@ List<string> ToReverse(List<string> tokens)
                 output.Enqueue(operators.Pop());
             }
 
-            if (IsLeftBracketToken(operators.Peek()))
+            if (!IsLeftBracketToken(operators.Peek()))
             {
                 throw new Exception("No left bracket at he operators stack");
             }
