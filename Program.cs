@@ -47,12 +47,13 @@ int Precedance(string token)
 
 }
 
-List<string> ToReverse(List<string> tokens)
+Queue<string> ToReverse(ArrayList tokens)
 {
     Queue<string> output = new Queue<string>();
     Stack<string> operators = new Stack<string>();
-    foreach (string token in tokens)
+    for (int i = 0; i < tokens.Count(); i++)
     {
+        string token = tokens.GetAt(i);
         if (IsNumberToken(token))
         {
             output.Enqueue(token);
@@ -111,14 +112,14 @@ List<string> ToReverse(List<string> tokens)
         output.Enqueue(operators.Pop());
     }
 
-    return output.ToList();
+    return output;
 }
 
 
-List<string> Tokenize(string r)
+ArrayList Tokenize(string r)
 {
     string buffer = "";
-    List<string> result = new List<string>();
+    ArrayList result = new ArrayList();
 
     foreach (Char s in r)
     { 
@@ -134,7 +135,7 @@ List<string> Tokenize(string r)
                 buffer = "";
             }
 
-            result.Add(item: s.ToString());
+            result.Add(s.ToString());
         }
     }
 
@@ -183,18 +184,70 @@ Stack<double> Calculate(List<string> tokens)
             s.Push(result);
         }
     }
-
-    if (s.Count == 1) 
-    { 
-        Console.WriteLine("Результат: " + s.Pop());
-    }
-
     return s;
 }
-    
+
 string input = Input();
-List <string> tokens = Tokenize(input);
-List<string> tpnTokens = ToReverse(tokens);
-Stack<double> result = Calculate(tpnTokens);
-//Console.WriteLine(String.Join("",tpnTokens));
+ArrayList tokens = Tokenize(input);
+Queue<string> tpnTokens = ToReverse(tokens);
+// Stack<double> result = Calculate(tpnTokens);
+Console.WriteLine(tpnTokens);
+
+public class ArrayList
+    {
+        private string[] _array = new string[10];
+
+        private int _pointer = 0;
+
+        public void Add(string element)
+        {
+            _array[_pointer] = element;
+            _pointer += 1;
+
+            if (_pointer == _array.Length)
+            {
+                var extendedArray = new string[_array.Length * 2];
+                for (var i = 0; i < _array.Length; i++)
+                {
+                    extendedArray[i] = _array[i];
+                }
+
+                _array = extendedArray;
+            }
+        }
+        public string GetAt(int index)
+        {
+            return _array[index];
+        }
+
+        public void Print()
+        {
+                for (var i = 0; i < _array.Length; i++)
+                {
+                    Console.WriteLine(_array[i]);
+                }
+        }
+
+        public void Remove(string element)
+        {
+            for (var i = 0; i < _pointer; i++)
+            {
+                if (_array[i] == element)
+                {
+                    for (var j = i; j < _pointer - 1; j++)
+                    {
+                        _array[j] = _array[j + 1];
+                    }
+
+                    _pointer -= 1;
+                    return;
+                }
+            }
+        }
+
+        public int Count()
+        {
+            return _pointer;
+        }
+    }
 
