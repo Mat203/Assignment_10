@@ -146,8 +146,55 @@ List<string> Tokenize(string r)
     return result;
 }
 
+Stack<double> Calculate(List<string> tokens)
+{
+    Stack<double> s = new Stack<double>();
+
+
+    foreach (string token in tokens)
+    {
+        if (double.TryParse(token, out double number))
+        {
+            s.Push(number);
+        }
+        else
+        {
+            double num2 = s.Pop();
+            double num1 = s.Pop();
+            double result = 0;
+            switch (token)
+            {
+                case "+":
+                    result = num1 + num2;
+                    break;
+                case "-":
+                    result = num1 - num2;
+                    break;
+                case "*":
+                    result = num1 * num2;
+                    break;
+                case "/":
+                    result = num1 / num2;
+                    break;
+                case "^":
+                    result = Math.Pow(num1, num2);
+                    break;
+            }
+            s.Push(result);
+        }
+    }
+
+    if (s.Count == 1) 
+    { 
+        Console.WriteLine("Результат: " + s.Pop());
+    }
+
+    return s;
+}
+    
 string input = Input();
 List <string> tokens = Tokenize(input);
 List<string> tpnTokens = ToReverse(tokens);
+Stack<double> result = Calculate(tpnTokens);
+//Console.WriteLine(String.Join("",tpnTokens));
 
-Console.WriteLine(String.Join("",tpnTokens));
