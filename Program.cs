@@ -47,6 +47,37 @@ int Precedance(string token)
 
 }
 
+ArrayList Tokenize(string r)
+{
+    string buffer = "";
+    ArrayList result = new ArrayList();
+
+    foreach (Char s in r)
+    { 
+        if (Char.IsNumber(s))
+        {
+            buffer += s;
+        }
+        else if (s is '+' or '-' or '*' or '/' or '(' or ')' or '^')
+        {
+            if (buffer.Length > 0)
+            {
+                result.Add(buffer);
+                buffer = "";
+            }
+
+            result.Add(s.ToString());
+        }
+    }
+
+    if (buffer.Length > 0)
+    {
+        result.Add(buffer);
+    }
+
+    return result;
+}
+
 Queue<string> ToReverse(ArrayList tokens)
 {
     Queue<string> output = new Queue<string>();
@@ -116,52 +147,21 @@ Queue<string> ToReverse(ArrayList tokens)
 }
 
 
-ArrayList Tokenize(string r)
+Stack<string> Calculate(Queue<string> tokens)
 {
-    string buffer = "";
-    ArrayList result = new ArrayList();
-
-    foreach (Char s in r)
-    { 
-        if (Char.IsNumber(s))
-        {
-            buffer += s;
-        }
-        else if (s is '+' or '-' or '*' or '/' or '(' or ')' or '^')
-        {
-            if (buffer.Length > 0)
-            {
-                result.Add(buffer);
-                buffer = "";
-            }
-
-            result.Add(s.ToString());
-        }
-    }
-
-    if (buffer.Length > 0)
-    {
-        result.Add(buffer);
-    }
-
-    return result;
-}
-
-Stack<double> Calculate(List<string> tokens)
-{
-    Stack<double> s = new Stack<double>();
+    Stack<string> s = new Stack<string>();
 
 
     foreach (string token in tokens)
     {
         if (double.TryParse(token, out double number))
         {
-            s.Push(number);
+            s.Push(number.ToString());
         }
         else
         {
-            double num2 = s.Pop();
-            double num1 = s.Pop();
+            double num2 = Convert.ToDouble(s.Pop());
+            double num1 = Convert.ToDouble(s.Pop());
             double result = 0;
             switch (token)
             {
@@ -181,7 +181,7 @@ Stack<double> Calculate(List<string> tokens)
                     result = Math.Pow(num1, num2);
                     break;
             }
-            s.Push(result);
+            s.Push(result.ToString());
         }
     }
     return s;
@@ -190,9 +190,36 @@ Stack<double> Calculate(List<string> tokens)
 string input = Input();
 ArrayList tokens = Tokenize(input);
 Queue<string> tpnTokens = ToReverse(tokens);
-// Stack<double> result = Calculate(tpnTokens);
-Console.WriteLine(tpnTokens);
+Stack<string> result = Calculate(tpnTokens);
+Console.WriteLine(result.Pop());
 
+public class Stack
+    {
+        private const int Capacity = 50;
+
+        private string[] _array = new string[Capacity];
+
+        private int _pointer;
+
+        public void Push(string value)
+        {
+            if (_pointer == _array.Length)
+            {
+                // this code is raising an exception about reaching stack limit
+                throw new Exception("Stack overflowed");
+            }
+
+            _array[_pointer] = value;
+            _pointer++;
+        }
+
+        public string Pull()
+        {
+            var value = _array[_pointer];
+            _pointer--;
+            return value;
+        }
+    }
 public class ArrayList
     {
         private string[] _array = new string[10];
