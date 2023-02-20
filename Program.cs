@@ -78,10 +78,10 @@ ArrayList Tokenize(string r)
     return result;
 }
 
-Queue<string> ToReverse(ArrayList tokens)
+Queue ToReverse(ArrayList tokens)
 {
-    Queue<string> output = new Queue<string>();
-    Stack<string> operators = new Stack<string>();
+    Queue output = new Queue();
+    Stack operators = new Stack();
     for (int i = 0; i < tokens.Count(); i++)
     {
         string token = tokens.GetAt(i);
@@ -147,13 +147,14 @@ Queue<string> ToReverse(ArrayList tokens)
 }
 
 
-Stack Calculate(Queue<string> tokens)
+void Calculate(Queue tokens)
 {
     Stack s = new Stack();
 
-
-    foreach (string token in tokens)
+    for (int i = 0; i < tokens.Count(); i++)
     {
+         string token = tokens.GetAt(i);
+    
         if (double.TryParse(token, out double number))
         {
             s.Push(number.ToString());
@@ -184,14 +185,15 @@ Stack Calculate(Queue<string> tokens)
             s.Push(result.ToString());
         }
     }
-    return s;
+    Console.Write("Result: ");
+    Console.Write(s.Pop());
 }
 
 string input = Input();
 ArrayList tokens = Tokenize(input);
-Queue<string> tpnTokens = ToReverse(tokens);
-Stack result = Calculate(tpnTokens);
-Console.WriteLine(result.Pop());
+Queue tpnTokens = ToReverse(tokens);
+Calculate(tpnTokens);
+
 
 public class Stack
     {
@@ -205,7 +207,6 @@ public class Stack
         {
             if (_pointer == _array.Length)
             {
-                // this code is raising an exception about reaching stack limit
                 throw new Exception("Stack overflowed");
             }
 
@@ -215,17 +216,28 @@ public class Stack
         public string Pop()
         {
             if (_pointer == 0)
+            {
+                throw new InvalidOperationException("Стек порожній");
+            }
+
+            _pointer--; 
+            string item = _array[_pointer]; 
+
+            return item;
+        }
+        public string Peek()
         {
-            throw new InvalidOperationException("Стек порожній");
+            if (_pointer == 0)
+            {
+                throw new InvalidOperationException("Стек порожній");
+            }
+
+        return _array[_pointer - 1]; 
         }
-
-        _pointer--; 
-        string item = _array[_pointer]; 
-        _array[_pointer] = default(string); 
-
-        return item;
+        public int Count
+        {
+            get { return _pointer; }
         }
-
         public string Pull()
         {
             var value = _array[_pointer];
@@ -291,3 +303,30 @@ public class ArrayList
         }
     }
 
+public class Queue
+{
+    private ArrayList _items = new ArrayList();
+
+    public void Enqueue(string item)
+    {
+        _items.Add(item);
+    }
+
+    public string GetAt(int index)
+    {
+        return _items.GetAt(index);
+    }
+    public int Count ()
+    {
+        return _items.Count();
+    }
+    public string Peek()
+    {
+        if (_items.Count() == 0)
+        {
+            throw new InvalidOperationException("Queue is empty");
+        }
+
+        return _items.GetAt(0);
+    }
+}
