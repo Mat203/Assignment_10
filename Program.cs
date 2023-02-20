@@ -147,9 +147,9 @@ Queue<string> ToReverse(ArrayList tokens)
 }
 
 
-Stack<string> Calculate(Queue<string> tokens)
+Stack Calculate(Queue<string> tokens)
 {
-    Stack<string> s = new Stack<string>();
+    Stack s = new Stack();
 
 
     foreach (string token in tokens)
@@ -190,7 +190,7 @@ Stack<string> Calculate(Queue<string> tokens)
 string input = Input();
 ArrayList tokens = Tokenize(input);
 Queue<string> tpnTokens = ToReverse(tokens);
-Stack<string> result = Calculate(tpnTokens);
+Stack result = Calculate(tpnTokens);
 Console.WriteLine(result.Pop());
 
 public class Stack
@@ -211,6 +211,19 @@ public class Stack
 
             _array[_pointer] = value;
             _pointer++;
+        }
+        public string Pop()
+        {
+            if (_pointer == 0)
+        {
+            throw new InvalidOperationException("Стек порожній");
+        }
+
+        _pointer--; 
+        string item = _array[_pointer]; 
+        _array[_pointer] = default(string); 
+
+        return item;
         }
 
         public string Pull()
