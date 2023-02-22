@@ -153,7 +153,7 @@ void Calculate(Queue tokens)
 
     for (int i = 0; i < tokens.Count(); i++)
     {
-         string token = tokens.GetAt(i);
+        string token = tokens.GetAt(i);
     
         if (double.TryParse(token, out double number))
         {
@@ -237,12 +237,6 @@ public class Stack
         public int Count
         {
             get { return _pointer; }
-        }
-        public string Pull()
-        {
-            var value = _array[_pointer];
-            _pointer--;
-            return value;
         }
     }
 public class ArrayList
